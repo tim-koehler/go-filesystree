@@ -13,8 +13,8 @@ type File struct {
 }
 
 type Metadata struct {
-	date string
-	size int64
+	Date string
+	Size int64
 }
 
 func (file *File) GetName() string {
@@ -30,23 +30,23 @@ func (file *File) GetDirectory() *Directory {
 }
 
 func (file *File) GetDate() string {
-	return strings.Split(file.metadata.date, " ")[0]
+	return strings.Split(file.metadata.Date, " ")[0]
 }
 
 func (file *File) GetDateTime() string {
-	return file.metadata.date
+	return file.metadata.Date
 }
 
 func (file *File) GetHumanReadableSize() string {
 	unit := int64(1000)
 
-	if file.metadata.size < unit {
-		return fmt.Sprintf("%d B", file.metadata.size)
+	if file.metadata.Size < unit {
+		return fmt.Sprintf("%d B", file.metadata.Size)
 	}
 	div, exp := int64(unit), 0
-	for n := file.metadata.size / unit; n >= unit; n /= unit {
+	for n := file.metadata.Size / unit; n >= unit; n /= unit {
 		div *= unit
 		exp++
 	}
-	return fmt.Sprintf("%.2f %cB", float64(file.metadata.size)/float64(div), "kMGTPE"[exp])
+	return fmt.Sprintf("%.2f %cB", float64(file.metadata.Size)/float64(div), "kMGTPE"[exp])
 }
