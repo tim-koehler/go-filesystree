@@ -22,7 +22,7 @@ func (file *File) GetName() string {
 }
 
 func (file *File) GetFullName() string {
-	return fmt.Sprintf("%s/%s", file.path+file.name)
+	return fmt.Sprintf("%s/%s", file.path, file.name)
 }
 
 func (file *File) GetDirectory() *Directory {
