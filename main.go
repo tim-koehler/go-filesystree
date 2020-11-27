@@ -6,19 +6,15 @@ import (
 
 func main() {
 	slist := []string{
-		"/mnt/sdcard/folder1/a/b/file1.file",
-		"/mnt/sdcard/folder1/a/b/file2.file",
-		"/mnt/sdcard/folder1/a/b/file3.file",
-		"/mnt/sdcard/folder1/a/b/file4.file",
-		"/mnt/sdcard/folder1/a/b/file5.file",
-		"/mnt/sdcard/folder1/e/c/file6.file",
-		"/mnt/sdcard/folder2/d/file7.file",
-		"/mnt/sdcard/folder2/d/file8.file",
-		"/mnt/sdcard/file9.file"}
+		"/foo/bar/baz.txt",
+		"/foo/bar/a.txt",
+		"/tmp/a/b.c",
+		"/tmp/b/c.c",
+		"/tmp/b/d.c"}
 
 	fst := filesystree.New()
 	for _, s := range slist {
-		fst.AddElement(s)
+		fst.AddFile(s, nil)
 	}
 
 	fst.PrintTree()
