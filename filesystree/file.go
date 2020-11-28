@@ -2,51 +2,36 @@ package filesystree
 
 import (
 	"fmt"
-	"strings"
 )
 
+// File struct which contains name, path, directory and optional metadata.
 type File struct {
 	name      string
 	path      string
 	directory *Directory
-	metadata  *Metadata
+	metadata  Metadata
 }
 
-type Metadata struct {
-	Date string
-	Size int64
-}
+// Metadata can be used to store addidional metadata for files.
+type Metadata map[string]interface{}
 
+// GetName returns the name of the file.
 func (file *File) GetName() string {
 	return file.name
 }
 
+// GetFullName returns the name of the path + file.
 func (file *File) GetFullName() string {
 	return fmt.Sprintf("%s/%s", file.path, file.name)
 }
 
+// GetDirectory returns the the directory which contains this file.
 func (file *File) GetDirectory() *Directory {
 	return file.directory
 }
 
-func (file *File) GetDate() string {
-	return strings.Split(file.metadata.Date, " ")[0]
-}
-
-func (file *File) GetDateTime() string {
-	return file.metadata.Date
-}
-
-func (file *File) GetHumanReadableSize() string {
-	unit := int64(1000)
-
-	if file.metadata.Size < unit {
-		return fmt.Sprintf("%d B", file.metadata.Size)
-	}
-	div, exp := int64(unit), 0
-	for n := file.metadata.Size / unit; n >= unit; n /= unit {
-		div *= unit
-		exp++
-	}
-	return fmt.Sprintf("%.2f %cB", float64(file.metadata.Size)/float64(div), "kMGTPE"[exp])
+// GetMetadata returns the attached metadata of the file.
+// If no metadata is defined nil is returned.
+func (file *File) GetMetadata() Metadata {
+	return file.metadata
 }

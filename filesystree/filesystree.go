@@ -4,6 +4,7 @@ import (
 	"strings"
 )
 
+// FilesysTree containing the root of the tree.
 type FilesysTree struct {
 	Root *Directory
 }
@@ -21,18 +22,16 @@ func New() FilesysTree {
 	return fst
 }
 
-func (fst *FilesysTree) AddFile(filePath string, meta *Metadata) {
+// AddFile add the file to the filesystem tree.
+func (fst *FilesysTree) AddFile(filePath string, meta Metadata) {
 	if strings.HasPrefix(filePath, "/") {
 		filePath = strings.TrimPrefix(filePath, "/")
 	}
 	splitPath := strings.Split(filePath, "/")
-	fst.Root.Add(fst.Root.incrementalPath, splitPath, meta)
+	fst.Root.add(fst.Root.incrementalPath, splitPath, meta)
 }
 
-func (fst *FilesysTree) PrintTree() {
-	fst.Root.Print(0)
-}
-
+// FindDirectoriesAtPath return a list of directories at a given path.
 func (fst *FilesysTree) FindDirectoriesAtPath(path string) []*Directory {
 	return fst.getDirsAtPath(fst.Root, path)
 }
@@ -52,6 +51,7 @@ func (fst *FilesysTree) getDirsAtPath(dir *Directory, path string) []*Directory 
 	return nil
 }
 
+// FindFilesAtPath return a list of files at a given path.
 func (fst *FilesysTree) FindFilesAtPath(path string) []*File {
 	return fst.getFilesAtPath(fst.Root, path)
 }
@@ -69,4 +69,10 @@ func (fst *FilesysTree) getFilesAtPath(dir *Directory, path string) []*File {
 		}
 	}
 	return nil
+}
+
+// GetTree return the whole filesystem in a tree like string pattern.
+func (fst *FilesysTree) GetTree() string {
+	builder := strings.Builder{}
+	return fst.Root.print(0, &builder)
 }

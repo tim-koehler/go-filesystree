@@ -2,8 +2,10 @@ package filesystree
 
 import (
 	"fmt"
+	"strings"
 )
 
+// Directory structure containing the name, files, subdirectories, ...
 type Directory struct {
 	name            string
 	files           []*File
@@ -12,7 +14,7 @@ type Directory struct {
 	incrementalPath string
 }
 
-func (dir *Directory) Add(currentPath string, splitPath []string, meta *Metadata) {
+func (dir *Directory) add(currentPath string, splitPath []string, meta Metadata) {
 	if len(splitPath) == 1 {
 		dir.files = append(dir.files, &File{
 			name:      splitPath[0],
@@ -34,9 +36,9 @@ func (dir *Directory) Add(currentPath string, splitPath []string, meta *Metadata
 	contains, nextDir := dir.getIfContains(newDir)
 	if !contains {
 		dir.directories = append(dir.directories, &newDir)
-		newDir.Add(newDir.incrementalPath, splitPath[1:], meta)
+		newDir.add(newDir.incrementalPath, splitPath[1:], meta)
 	} else {
-		nextDir.Add(nextDir.incrementalPath, splitPath[1:], meta)
+		nextDir.add(nextDir.incrementalPath, splitPath[1:], meta)
 	}
 }
 
@@ -49,42 +51,48 @@ func (dir *Directory) getIfContains(d Directory) (bool, *Directory) {
 	return false, nil
 }
 
+// GetParentDirectory returns the parent directory of this directory.
 func (dir *Directory) GetParentDirectory() *Directory {
 	return dir.parent
 }
 
+// GetSubDirectories return a list of all the directorys contained in that directory (not recursive).
 func (dir *Directory) GetSubDirectories() []*Directory {
 	return dir.directories
 }
 
+// GetFiles returns a list of all the files contained in that directory (not recursive).
 func (dir *Directory) GetFiles() []*File {
 	return dir.files
 }
 
-func (dir *Directory) GetAbsolutPath() string {
+// GetFullName returns the path + name of the directory.
+func (dir *Directory) GetFullName() string {
 	return dir.incrementalPath
 }
 
+// GetName returns the name of the directory.
 func (dir *Directory) GetName() string {
 	return dir.name
 }
 
-func (dir *Directory) Print(increment int) {
+func (dir *Directory) print(increment int, builder *strings.Builder) string {
 	for i := 0; i < increment; i++ {
-		fmt.Printf(" ")
+		builder.WriteRune(' ')
 	}
-	fmt.Println(dir.GetName())
+	builder.WriteString(fmt.Sprintf("%s\n", dir.GetName()))
 
 	if len(dir.directories) > 0 {
 		for _, d := range dir.directories {
-			d.Print(increment + 2)
+			d.print(increment+2, builder)
 		}
 	}
 
 	for _, f := range dir.files {
 		for i := 0; i < increment; i++ {
-			fmt.Printf(" ")
+			builder.WriteRune(' ')
 		}
-		fmt.Println("- " + f.GetName())
+		builder.WriteString(fmt.Sprintf("- %s\n", f.GetName()))
 	}
+	return builder.String()
 }
