@@ -9,6 +9,7 @@ type FilesysTree struct {
 	Root *Directory
 }
 
+// New creates a new FilesysTree
 func New() FilesysTree {
 	fst := FilesysTree{
 		Root: &Directory{
