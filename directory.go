@@ -56,7 +56,7 @@ func (dir *Directory) GetParentDirectory() *Directory {
 	return dir.parent
 }
 
-// GetSubDirectories return a list of all the directorys contained in that directory (not recursive).
+// GetSubDirectories return a list of all the directories contained in that directory (not recursive).
 func (dir *Directory) GetSubDirectories() []*Directory {
 	return dir.directories
 }
